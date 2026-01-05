@@ -3,7 +3,14 @@ import { GoogleGenAI } from "@google/genai";
 import { GameResult } from "../types";
 
 export const getCognitiveInsight = async (result: GameResult): Promise<string> => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  const apiKey = process.env.API_KEY;
+  
+  if (!apiKey) {
+    console.warn("API_KEY is not defined in process.env");
+    return "优秀的表现！这种高强度的切换练习能有效重塑大脑的注意回路。";
+  }
+
+  const ai = new GoogleGenAI({ apiKey });
   
   try {
     const response = await ai.models.generateContent({
@@ -23,6 +30,6 @@ export const getCognitiveInsight = async (result: GameResult): Promise<string> =
     return response.text || "你的神经调节能力正在显著增强，继续保持挑战！";
   } catch (error) {
     console.error("Gemini insight error:", error);
-    return "优秀的表现！这种高强度的切换练习能有效重塑大脑的注意回路。";
+    return "优秀的表现！持续挑战自己以获得更好的专注力。";
   }
 };
